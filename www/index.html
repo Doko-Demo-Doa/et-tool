@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<!-- CSP support mode (required for Windows Universal apps): https://docs.angularjs.org/api/ng/directive/ngCsp -->
+<html lang="en" ng-app="app" ng-controller="myCtrl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- JS dependencies (order matters!) -->
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/onsen/js/onsenui.js"></script>
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components-blue-basic-theme.css" />
+
+    <!-- CSP support mode (required for Windows Universal apps) -->
+    <link rel="stylesheet" href="lib/angular/angular-csp.css" />
+
+
+    <!-- --------------- App init --------------- -->
+    <!-- --------------- Tiêu đề app --------------- -->
+    <title>ET Tool LUH10</title>
+
+    <script>
+        // Khởi tạo module chạy các hám
+        angular.module('app', ['onsen']).controller('myCtrl', function($scope) {
+            // Hàm tính khoảng cách thu phát, từ đoạn ons.notification.alert là hiển thị
+            $scope.tinhKhoangCachThuPhat = function (a, h, x, y) {
+                a =  parseFloat(a);
+                h =  parseFloat(h);
+                x =  parseFloat(x);
+                y =  parseFloat(y);
+
+                if (    isNaN(a) ||
+                        isNaN(h) ||
+                        isNaN(x) ||
+                        isNaN(y)  )
+                {
+                    ons.notification.alert({
+                        message: 'Vui lòng nhập số hợp lệ!',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Lỗi:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            //Nothing
+                        }
+                    });
+                }
+
+                else
+                {
+                    var result = Math.sqrt( (a+h)*(a+h) + a*a - 2*a*(a+h)*Math.cos(x)*Math.cos(y) );
+                    var resultFixed = result.toFixed(2);
+                    //var linhtinh = Math.sqrt(x1+y1*2);
+
+                    ons.notification.alert({
+                        message: 'R= '+ resultFixed + ' Km',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Khoảng cách thu phát:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            // Alert button is closed! No subsequent action!
+                        }
+                    });
+                }
+            };
+
+            // Hàm tính suy hao không gian tự do
+            $scope.tinhSuyHaoKhongGianTuDo = function (r, lambda) {
+                r =  parseFloat(r);
+                lambda =  parseFloat(lambda);
+
+                if (    isNaN(r) || isNaN(lambda)  )
+                {
+                    ons.notification.alert({
+                        message: 'Vui lòng nhập số hợp lệ!',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Lỗi:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            //Nothing
+                        }
+                    });
+                }
+
+                else
+
+                {
+                    var result = 20*Math.log((4*Math.PI*r)/lambda);
+                    var resultFixed = result.toFixed(2);
+
+                    ons.notification.alert({
+                        message: 'Ls= '+ resultFixed + ' db',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Suy hao không gian tự do:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            // Alert button is closed! No subsequent action!
+                        }
+                    });
+                }
+            };
+
+            // Hàm tính tần số chuẩn hóa, nhấn Tiếp để xem số mode có thể truyền
+            $scope.tinhTanSoChuanHoa = function (ttq_a, ttq_lambda, ttq_n1, ttq_n2) {
+                ttq_a =  parseFloat(ttq_a);
+                ttq_lambda =  parseFloat(ttq_lambda);
+
+                if (    isNaN(ttq_a) || isNaN(ttq_lambda) || isNaN(ttq_n1) || isNaN(ttq_n2)  )
+                {
+                    ons.notification.alert({
+                        message: 'Vui lòng nhập số hợp lệ!',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Lỗi:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            //Nothing
+                        }
+                    });
+                }
+
+                else
+
+                {
+                    var result = ((2*Math.PI*ttq_a)/ttq_lambda) * (Math.sqrt(ttq_n1*ttq_n1 + ttq_n2*ttq_n2));
+                    var ttq_M = ((result*result)/2) + 1;
+                    var resultFixed = result.toFixed(2);
+                    var ttq_MFixed = ttq_M.toFixed(2);
+
+                    ons.notification.alert({
+                        message: 'V = '+ resultFixed + '',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Tần số chuẩn hóa:',
+                        buttonLabel: 'Tiếp',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {                        
+                            ons.notification.alert({
+                            message: 'M = ' + parseInt(ttq_MFixed || 0),
+                            title: 'Số mode có thể truyền:',
+                            buttonLabel: 'Đóng',
+                            });
+                        }
+                    });
+                }
+            };
+
+            // Hàm tính hệ số phản xạ tại tải, nhấn Tiếp để xem hệ số sóng đứng
+            $scope.tinhHeSoPhanXaTaiTai = function (sct_zl, sct_z0) {
+                sct_zl =  parseFloat(sct_zl);
+                sct_z0 =  parseFloat(sct_z0);
+
+                if (    isNaN(sct_zl) || isNaN(sct_z0)  )
+                {
+                    ons.notification.alert({
+                        message: 'Vui lòng nhập số hợp lệ!',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Lỗi:',
+                        buttonLabel: 'Đóng',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {
+                            //Nothing
+                        }
+                    });
+                }
+
+                else
+
+                {
+                    var gamma = (sct_zl-sct_z0)/(sct_zl+sct_z0);
+                    var swr = (1+(Math.abs(gamma)))/(1-(Math.abs(gamma)));
+                    var gammaFixed = gamma.toFixed(2);
+                    var swrFixed = swr.toFixed(2);
+
+                    ons.notification.alert({
+                        message: 'Kết quả: '+ gammaFixed + '',
+                        // or messageHTML: '<div>Message in HTML</div>',
+                        title: 'Hệ số phản xạ tại tải:',
+                        buttonLabel: 'Tiếp',
+                        animation: 'default', // or 'none'
+                        // modifier: 'optional-modifier'
+                        callback: function() {                        
+                            ons.notification.alert({
+                            message: parseInt(swrFixed || 0),
+                            title: 'Hệ số sóng đứng:',
+                            buttonLabel: 'Đóng',
+                            });
+                        }
+                    });
+                }
+            };
+        });
+    </script>
+
+    <style>
+        .page--menu-page__background {
+            background-color: #333;
+        }
+
+        .page--menu-page__content {
+            color: white;
+        }
+
+        .menu-close,
+        .menu-close > .toolbar-button {
+            color: #999;
+        }
+
+        .menu-list,
+        .menu-item:first-child,
+        .menu-item:last-child,
+        .menu-item {
+            background-color: transparent;
+            background-image: none !important;
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .menu-item {
+            padding: 0 0 0 20px;
+            line-height: 52px;
+            height: 52px;
+            text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;
+        }
+
+            .menu-item:active {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+        .menu-notification {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 14px;
+            height: 16px;
+            line-height: 16px;
+            min-width: 16px;
+            font-weight: 600;
+        }
+
+        .bottom-menu-list,
+        .bottom-menu-item:first-child,
+        .bottom-menu-item:last-child,
+        .bottom-menu-item {
+            border-color: #393939;
+            background-color: transparent;
+            background-image: none !important;
+            color: #ccc;
+        }
+
+        .bottom-menu-item:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /*Customs*/
+
+        .button {
+            width: 260px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .ng-invalid-number {
+            border: 1px solid #E11616 !important;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <!-- Cordova reference -->
+    <script src="cordova.js"></script>
+    <script src="scripts/index.js"></script>
+    <!-- -->
+
+
+    <ons-sliding-menu menu-page="menu.html" main-page="trangchinh.html" side="left"
+                      var="menu" type="reveal" max-slide-distance="260px" swipeable="true" color="#333">
+    </ons-sliding-menu>
+
+    <ons-template id="menu.html">
+        <ons-page modifier="menu-page">
+            <ons-toolbar modifier="transparent"></ons-toolbar>
+
+            <!-- <ons-list class="menu-list">
+                <ons-list-item class="menu-item" ng-click="menu.setMainPage('page1.html', {closeMenu: true})">
+                    <ons-icon icon="fa-plus"></ons-icon>
+                    New Post
+                </ons-list-item>
+
+                <ons-list-item class="menu-item" ng-click="menu.setMainPage('page2.html', {closeMenu: true})">
+                    <ons-icon icon="fa-bookmark"></ons-icon>
+                    Bookmark
+                </ons-list-item>
+
+                <ons-list-item class="menu-item" ng-click="menu.setMainPage('page1.html', {closeMenu: true})">
+                    <ons-icon icon="fa-twitter"></ons-icon>
+                    Official Twitter
+                </ons-list-item>
+            </ons-list>
+
+            <br> -->
+
+            <ons-list class="bottom-menu-list">
+                <ons-list-item class="bottom-menu-item" ng-click="menu.setMainPage('trangchinh.html', {closeMenu: true})">
+                    Trang chính
+                    <!-- <div class="notification menu-notification">3</div> -->
+                </ons-list-item>
+
+                <ons-list-item class="bottom-menu-item" ng-click="menu.setMainPage('gioithieu.html', {closeMenu: true})">
+                    Giới thiệu
+                </ons-list-item>
+
+                <ons-list-item class="bottom-menu-item" ng-click="navigator.app.exitApp()">
+                    Thoát
+                </ons-list-item>
+            </ons-list>
+        </ons-page>
+    </ons-template>
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 0-1: Trang chính -->
+    <!-- ///////////////////////////////////////// -->
+
+    <ons-template id="trangchinh.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Trang chính</div>
+            </ons-toolbar>
+            <ons-row style="margin-top: 80px; text-align: center;">
+                <ons-col>
+                    <ons-button ng-click="menu.setMainPage('angten-va-truyensong.html', { animation : 'slide' })">
+                        Ăng-ten và truyền sóng
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+            <ons-row style="margin-top: 20px; text-align: center;">
+                <ons-col>
+                    <ons-button ng-click="menu.setMainPage('thongtinquang.html', { animation : 'slide' })">
+                        Thông tin quang
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+            <ons-row style="margin-top: 20px; text-align: center;">
+                <ons-col>
+                    <ons-button ng-click="menu.setMainPage('sieucaotan.html', { animation : 'slide' })">
+                        Siêu cao tần
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+            <ons-row style="margin-top: 100px; text-align: center;">
+                <ons-col>
+                    <p>LUH team</p>
+                    <p>Copyrights (c) 2015. All rights reserved.</p>
+                </ons-col>
+            </ons-row>
+        </ons-page>
+    </ons-template>
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 0-2: Giới thiệu -->
+    <!-- ///////////////////////////////////////// -->
+
+    <ons-template id="gioithieu.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Trang chính</div>
+            </ons-toolbar>
+            <div style="text-align: center; margin: 50px 30px;">
+                <h1>Developed by LUH10 Team</h1>
+                <p>Coder: Nguyễn Văn Quang</p>
+            </div>
+        </ons-page>
+    </ons-template>
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 1: Ăng-ten và truyền sóng -->
+    <!-- ///////////////////////////////////////// -->
+
+
+    <ons-template id="angten-va-truyensong.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Ăng-ten và truyền sóng</div>
+            </ons-toolbar>
+            <ons-row style="margin-top: 100px; text-align: center;">
+                <ons-col>
+                    <ons-button modifier="cta" ng-click="menu.setMainPage('suyhao-khonggian-tudo.html', {closeMenu: false})">
+                        Suy hao không gian tự do
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+            <ons-row style="margin-top: 100px; text-align: center;">
+                <ons-col>
+                    <ons-button modifier="cta" ng-click="menu.setMainPage('khoangcach-thuphat.html', {animation: slide})">
+                        Khoảng cách thu phát
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+        </ons-page>
+    </ons-template>
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 1.1: Tính khoảng cách thu phát -->
+    <!-- ///////////////////////////////////////// -->
+
+            <!--<script>-->
+                <!-- Bỏ -- >
+                <!--$scope.tinhTong = function () {-->
+                    <!--ons.notification.alert({-->
+                        <!--message: 'Message',-->
+                        <!--// or messageHTML: '<div>Message in HTML</div>',-->
+                        <!--title: 'Dialog Title',-->
+                        <!--buttonLabel: 'OK',-->
+                        <!--animation: 'default', // or 'none'-->
+                        <!--// modifier: 'optional-modifier'-->
+                        <!--callback: function() {-->
+                        <!--// Alert button is closed!-->
+                        <!--}-->
+                    <!--});-->
+                <!--}-->
+            <!--</script>-->
+
+    <ons-template id="khoangcach-thuphat.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Suy hao không gian tự do</div>
+            </ons-toolbar>
+            <div style="margin-top: 50px; margin-left: 20px; margin-right: 20px;">
+                <input type="number" value="" placeholder="Nhập a" class="text-input" ng-model="a">
+                <p>(a là bán kính Trái Đất - km)</p>           
+
+                <input type="number" value="" placeholder="Nhập h" class="text-input" ng-model="h">
+                <p>(h là độ cao vệ tinh địa tĩnh so với Trái Đất - km)</p>
+
+                <input type="number" value="" placeholder="Nhập x" class="text-input" ng-model="x">
+                <p>(x là kinh độ vệ tinh - kinh độ trái đất - km)</p>            
+            
+                <input type="number" value="" placeholder="Nhập x" class="text-input" ng-model="y">             
+                <p>(y là vĩ độ trái đất - km)</p>
+            </div>
+
+            <ons-button ng-click="tinhKhoangCachThuPhat(a, h, x, y)" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+                Tính khoảng cách thu phát
+            </ons-button>
+        </ons-page>
+    </ons-template>
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 1.2: Tính suy hao không gian tự do -->
+    <!-- ///////////////////////////////////////// -->
+
+    <ons-template id="suyhao-khonggian-tudo.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Ăng-ten và truyền sóng</div>
+            </ons-toolbar>
+            <div style="margin-top: 50px; margin-left: 20px; margin-right: 20px;">
+                <input type="number" value="" placeholder="Nhập R" class="text-input" ng-model="r">
+                <p>(R là khoảng cách thu phát - km)</p>           
+
+                <input type="number" value="" placeholder="Nhập lambda" class="text-input" ng-model="lambda">
+                <p>(Lambda là bước sóng được sử dụng)</p>        
+            </div>
+
+            <ons-button ng-click="tinhSuyHaoKhongGianTuDo(r, lambda)" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+                Tính suy hao không gian tự do
+            </ons-button>
+        </ons-page>
+    </ons-template>
+
+
+
+    <!-- ///////////////////////////////////////// -->
+    <!-- Trang 2: Thông tin quang ------------------->
+    <!-- ///////////////////////////////////////// -->
+
+    <ons-template id="thongtinquang.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Thông tin quang</div>
+            </ons-toolbar>
+
+            <ons-row style="margin-top: 20px; padding-left: 20px; padding-right: 20px; text-align: left;">
+                <ons-col>
+                    <h5>Tần số chuẩn hóa</h5>
+
+                    <input type="number" value="" placeholder="Nhập a" class="text-input" ng-model="ttq_a">
+                    <p>(a là...)</p>           
+
+                    <input type="number" value="" placeholder="Nhập lambda" class="text-input" ng-model="ttq_lambda">
+                    <p>(Lambda là...)</p>
+
+                    <input type="number" value="" placeholder="Nhập n1" class="text-input" ng-model="ttq_n1">
+                    <p>(N1 là...)</p>            
+                
+                    <input type="number" value="" placeholder="Nhập n2" class="text-input" ng-model="ttq_n2">            
+                    <p>(N2 là...)</p>
+
+                    <ons-button ng-click="tinhTanSoChuanHoa(ttq_a, ttq_lambda, ttq_n1, ttq_n2)" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+                        Tính tần số chuẩn hóa
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+        </ons-page>
+    </ons-template>
+
+    <ons-template id="sieucaotan.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button ng-click="menu.toggle()">
+                        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">Siêu cao tần</div>
+            </ons-toolbar>
+
+
+            <ons-row style="margin-top: 20px; padding-left: 20px; padding-right: 20px; text-align: left;">
+                <ons-col>
+                    <h5>Tần số chuẩn hóa</h5>
+
+                    <input type="number" value="" placeholder="Nhập zl" class="text-input" ng-model="sct_zl">
+                    <p>(Zl là...)</p>           
+
+                    <input type="number" value="" placeholder="Nhập z0" class="text-input" ng-model="sct_z0">
+                    <p>(Z0 là...)</p>
+
+                    <ons-button ng-click="tinhHeSoPhanXaTaiTai(sct_zl, sct_z0)" style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
+                        Tính hệ số phản xạ tại tải
+                    </ons-button>
+                </ons-col>
+            </ons-row>
+
+        </ons-page>
+    </ons-template>
+</body>
+</html>
