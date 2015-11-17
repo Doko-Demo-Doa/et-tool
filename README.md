@@ -1,33 +1,34 @@
-Onsen UI Quick Startup Guide
+Hướng dẫn nhanh
 ====
 
-This document describes the minimum information required to develop an app using Onsen UI.
+Các thao tác cơ bản để chạy ứng dụng (dùng Phonegap và OnsenUI).
 
-## Requirement
+## Yêu cầu
 
  * Node.js - [Install Node.js](http://nodejs.org)
- * Cordova - Install by `npm install cordova`
+ * Cordova - Cài bằng lệnh `npm install cordova`
+ * PhoneGap - Cài bằng lệnh `npm install -g phonegap`
+ * OnsenUI - Cài bằng lệnh `npm install onsenui`
 
-## Development Instructions
+## Hướng dẫn
 
-1. Install dependencies
+1. Cài đặt PhoneGap
 
-    $ npm install
+    $ npm install -g phonegap
 
-2. Install Gulp globally
+2. Cài đặt Cordova
 
-    $ npm install -g gulp
+    $ npm install -g cordova
 
-3. Run `gulp serve` and run the web server
+3. Cài đặt Onsen UI
 
-    $ gulp serve
+    $ npm install onsenui
 
-You should see running app on browser and you can start to develop your app with Onsen UI.
+Mở trình duyệt và test thử bằng localhost:3000
 
-### Directory Layout
+### Cấu trúc thư mục
 
     README.md     --> This file
-    gulpfile.js   --> Gulp tasks definition
     www/          --> Asset files for app
       index.html  --> App entry point
       js/
@@ -44,8 +45,7 @@ You should see running app on browser and you can start to develop your app with
     hooks/        --> Cordova hook directory
     scripts/      --> Cordova TS scripts directory and TS definitions
 
-## Gulp Tasks
+## Lệnh PhoneGap
 
- * `gulp serve` - Running the app for development.
- * `gulp build` - Build several files for project.
- * `gulp jshint` - Generate [jshint](https://github.com/jshint/jshint) report.
+ * `phonegap serve` - Chạy PhoneGap có autoreload.
+ * `phonegap serve --no-autoreload` - Chạy PhoneGap không có autoreload.
